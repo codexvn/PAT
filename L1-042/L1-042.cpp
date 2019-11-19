@@ -1,11 +1,9 @@
 #include <iostream>
-#include "iomanip"
+#include <iomanip>
 using namespace std;
 int main() {
-	int yyyy, mm, dd;
-	((cin >> mm).ignore() >> dd).ignore() >> yyyy;
-
-	cout << setfill('0') << setw(4) << yyyy << '-' << setw(2) << mm << '-' << setw(2) << dd;
-
+	tm time;
+	cin >> get_time(&time, "%m-%d-%Y");
+	cout << put_time(&time, "%Y-%m-%d");
 	return 0;
 }
