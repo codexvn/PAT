@@ -2,32 +2,24 @@
 #include <vector>
 using namespace std;
 int main()
-
 {
-	vector<vector<int>>A, B;
-	int R_a, R_b, C_a, C_b, get;
+	int R_a, R_b, C_a, C_b;
 	cin >> R_a >> C_a;
-	for (int i = 0; i < R_a; ++i)
+	int A[100][100];  //所有整数不超过100，也就是说元素个数不超过100*100
+	for (int i = 0; i < R_a; i++)
 	{
-		A.resize(i + 1);
 		for (int j = 0; j < C_a; j++)
-		{
-			cin >> get;
-			A[i].push_back(get);
-		}
+			cin >> A[i][j];
 	}
 	cin >> R_b >> C_b;
-	for (int i = 0; i < R_b; ++i)
+	int B[100][100];
+	for (int i = 0; i < R_b; i++)
 	{
-		B.resize(i + 1);
 		for (int j = 0; j < C_b; j++)
-		{
-			cin >> get;
-			B[i].push_back(get);
-		}
+			cin >> B[i][j];
 	}
 
-	if (C_a != R_b)cout << "Error: "<<C_a<<" != "<<R_b<<endl;
+	if (C_a != R_b)cout << "Error: " << C_a << " != " << R_b << endl;
 	else
 	{
 		cout << R_a << ' ' << C_b << endl;
