@@ -40,7 +40,7 @@ int main() {
 
 /*
 有几个坑
- 1:一开始是用的 cout<<setfill('0'<<setw(5)<<XXXX;结果发现最后两个测试超时，换成printf过了
+ 1:一开始是用的 cout<<setfill('0')<<setw(5)<<XXXX;结果发现最后两个测试超时，换成printf过了
  2:17-18行原来是合并的,cin >> pre_node_address>> list[pre_node_address].value >> list[pre_node_address].next;
     我自己的gcc10的可以正常运行的,但是判题用的gcc6不能按我期望的行为执行(为什么不换gcc10???)
 
