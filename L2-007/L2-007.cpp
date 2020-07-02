@@ -2,7 +2,7 @@
 #include<map>
 #include<vector>
 #include<algorithm>
-
+#include<cstdio>
 using namespace std;
 struct House {
     int count = 0;
@@ -71,24 +71,24 @@ int main() {
     }
     for (auto i = boss_list.begin(); i != boss_list.end(); i++) {
         i->second.avg_area = i->second.area / i->second.member.size();
-        i->second.avg_count =(double) i->second.count / i->second.member.size();
+        i->second.avg_count = (double )i->second.count / i->second.member.size();
     }
     vector<map<int, family_group>::iterator> sorted_boss_list;
     for (auto i = boss_list.begin(); i != boss_list.end(); ++i) {
         sorted_boss_list.push_back(i);
     }
-    for (auto& i: sorted_boss_list)
-        cout<<i->first<<endl;
-/*    sort(sorted_boss_list.begin(), sorted_boss_list.end(),
-         [](const vector<map<int, family_group>::iterator>::iterator a,
-            const vector<map<int, family_group>::iterator>::iterator b) -> bool {
-             if ((*a)->second.avg_area > (*b)->second.avg_area)
+    sort(sorted_boss_list.begin(), sorted_boss_list.end(),
+         [](const map<int, family_group>::iterator &a,
+            const map<int, family_group>::iterator &b) -> bool {
+             if ((*a).second.avg_area > (*b).second.avg_area)
                  return true;
-             else if ((*a)->second.avg_area == (*b)->second.avg_area)
-                 //return (*((*a)->second.member.begin())) > (*((*b)->second.member.begin()));
-                 return (*a)->first> (*b)->first;
+             else if ((*a).second.avg_area == (*b).second.avg_area)
+                 return (*a).first < (*b).first;
              else
                  return false;
-         });*/
+         });
+    cout<<sorted_boss_list.size()<<endl;
+    for(auto& i:sorted_boss_list )
+       printf("%04d %d %.3f %.3f\n",i->first,i->second.member.size(),i->second.avg_count,i->second.avg_area);
     return 0;
 }
