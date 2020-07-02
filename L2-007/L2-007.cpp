@@ -1,69 +1,94 @@
-#include <iostream>
-#include <set>
-#include <vector>
-#include <iomanip>
+#include<iostream>
+#include<map>
+#include<vector>
+#include<algorithm>
+
 using namespace std;
-struct House{
-    int count=0;
-    double area;
+struct House {
+    int count = 0;
+    double area = 0;
+} data[10001];
+int Boss[10000];
 
-}data[10001];
+int FindBoss(int ID) {
+    if (Boss[ID] == ID)
+        return ID;
+    else {
+        int tmp = FindBoss(Boss[ID]);
+        Boss[ID] = tmp;
+        return tmp;
+    }
+}
 
-int main(){
-    cout<<fixed<<setprecision(2);
-    vector<set<int>>family_group;
-    bool joined_group[10001]={false};
-    int N,ID,ID_father,ID_mother,ID_child,N_child;
-    cin>>N;
-    vector<int>ID_tmp;
-    for (int i = 0; i <N ; ++i,ID_tmp.clear()) {
-        cin>>ID>>ID_father>>ID_mother>>N_child;
-        ID_tmp.push_back(ID);
-        if(ID_father!=-1)
-        ID_tmp.push_back(ID_father);
-        if(ID_mother!=-1)
-        ID_tmp.push_back(ID_mother);
-        for (int j = 0; j <N_child ; ++j) {
-            cin>>ID_child;
-            ID_tmp.push_back(ID_child);
+void Merge(int ID_a, int ID_b) {
+    int tmp_ID_a = FindBoss(ID_a);
+    int tmp_ID_b = FindBoss(ID_b);
+    if (tmp_ID_a < tmp_ID_b)
+        Boss[tmp_ID_b] = tmp_ID_a;
+    else
+        Boss[tmp_ID_a] = tmp_ID_b;
+}
+
+int main() {
+    bool merged[10000] = {false};
+    for (int i = 0; i < 10000; ++i)
+        Boss[i] = i;
+    int N, ID, ID_father, ID_mother, ID_child_n, ID_child;
+    cin >> N;
+    for (int i = 0; i < N; ++i) {
+        cin >> ID >> ID_father >> ID_mother >> ID_child_n;
+        merged[ID] = true;
+        if (ID_father != -1) {
+            merged[ID_father] = true;
+            Merge(ID, ID_father);
         }
-        cin>>data[ID].count>>data[ID].area;
-
-
-        auto k = ID_tmp.begin();
-        bool finded_group=false;
-        for (; k !=ID_tmp.end(); ++k) {
-            if(joined_group[*k]== true and finded_group==false)
-            {
-                for (auto l = family_group.begin(); l != family_group.end(); ++l)
-                {
-                    if((*l).find(*k)!=(*l).end())
-                    {
-                        (*l).insert(ID_tmp.begin(),ID_tmp.end());
-                        finded_group=true;
-                        break;
-                    }
-
-                }
-            }
-            joined_group[*k]= true;
+        if (ID_mother != -1) {
+            merged[ID_mother] = true;
+            Merge(ID, ID_mother);
         }
-        if(finded_group== false)
-        {
-            family_group.push_back(set<int>(ID_tmp.begin(),ID_tmp.end()));
+        for (int j = 0; j < ID_child_n; ++j) {
+            cin >> ID_child;
+            merged[ID_child] = true;
+            Merge(ID, ID_child);
+        }
+        cin >> data[ID].count >> data[ID].area;
+    }
+    struct family_group {
+        int count = 0;
+        double area = 0;
+        double avg_count = 0;
+        double avg_area = 0;
+        vector<int> member;
+    };
+    map<int, family_group> boss_list;
+    for (int k = 0; k < 10000; ++k) {
+        if (merged[k] == true) {
+            int ID_tmp = FindBoss(k);
+            boss_list[ID_tmp].member.push_back(k);
+            boss_list[ID_tmp].count += data[k].count;
+            boss_list[ID_tmp].area += data[k].area;
         }
     }
-    cout<<family_group.size();
-    for (auto j  = family_group.begin();j!= family_group.end(); ++j) {
-
-        int count_this_family=0;
-        double area_this_family=0;
-        for (auto i = (*j).begin(); i !=(*j).end() ; ++i)
-        {
-            count_this_family+=data[(*i)].count;
-            area_this_family+=data[(*i)].area;
-        }
-        cout<<*(*j).begin()<<" "<<(*j).size()<<" "<< (double)count_this_family/((*j).size()-(*j).count(-1))<<" "<< area_this_family/((*j).size()-(*j).count(-1))<<endl;
+    for (auto i = boss_list.begin(); i != boss_list.end(); i++) {
+        i->second.avg_area = i->second.area / i->second.member.size();
+        i->second.avg_count =(double) i->second.count / i->second.member.size();
     }
+    vector<map<int, family_group>::iterator> sorted_boss_list;
+    for (auto i = boss_list.begin(); i != boss_list.end(); ++i) {
+        sorted_boss_list.push_back(i);
+    }
+    for (auto& i: sorted_boss_list)
+        cout<<i->first<<endl;
+/*    sort(sorted_boss_list.begin(), sorted_boss_list.end(),
+         [](const vector<map<int, family_group>::iterator>::iterator a,
+            const vector<map<int, family_group>::iterator>::iterator b) -> bool {
+             if ((*a)->second.avg_area > (*b)->second.avg_area)
+                 return true;
+             else if ((*a)->second.avg_area == (*b)->second.avg_area)
+                 //return (*((*a)->second.member.begin())) > (*((*b)->second.member.begin()));
+                 return (*a)->first> (*b)->first;
+             else
+                 return false;
+         });*/
     return 0;
 }
