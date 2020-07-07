@@ -6,7 +6,7 @@
 using namespace std;
 
 int main(){
-    std::ios::sync_with_stdio(false); //如果用cin就得吧这个加上，否则就用scanf,不加会超时
+    std::ios::sync_with_stdio(false); //如果用cin就得吧这个加上,不加会超时，否则就用scanf
     int N,tmp;
     multiset<int>data;
     cin>>N;
