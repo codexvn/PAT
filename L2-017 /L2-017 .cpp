@@ -6,7 +6,9 @@
 using namespace std;
 
 int main(){
-    std::ios::sync_with_stdio(false); //如果用cin就得吧这个加上,不加会超时，否则就用scanf
+    std::ios::sync_with_stdio(false);
+    cin.tie(NULL);//如果用cin就得把这个加上,不加会超时，否则就用scanf
+    //你卡我一个cin我是真没想到
     int N,tmp;
     multiset<int>data;
     cin>>N;
@@ -22,6 +24,5 @@ int main(){
         Outgoing+=*i;
     for (int j = flag; j <=N ; ++j,++i)
         Introverted+=*i;
-
     printf("Outgoing #: %d\nIntroverted #: %d\nDiff = %d",N-flag+1,flag-1,abs( Introverted-Outgoing));
 }
